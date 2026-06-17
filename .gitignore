@@ -1,8 +1,36 @@
-# large data / model artifacts (exceed GitHub's 100MB limit)
+# Large data / model artifacts (exceed GitHub's 100MB limit)
 dakota.tar.gz
 training_runs/
 training_data/
 
-# python build artifacts
+# Python build artifacts
 __pycache__/
 *.pyc
+
+# ---------------------------------------------------------------------------
+# Track source and docs only. Everything that is NOT a .py or .md file is
+# ignored -- generated figures (outside a figures/ folder), Dakota input/output
+# files, data dumps (.dat/.npy/.h5/...), logs, profiles, pickles, etc. -- so run
+# artifacts are never committed by accident.
+#
+# This affects only UNtracked files; anything already in git stays tracked.
+# To keep a new non-py/md file, add a matching "!pattern" line in this section.
+# ---------------------------------------------------------------------------
+
+# Ignore everything by default...
+*
+
+# ...but still descend into every directory so the allow-rules below can match.
+!*/
+
+# Keep Python sources, Markdown docs, and this file.
+!*.py
+!*.md
+!.gitignore
+
+# Keep figures, but only when they live in a figures/ directory.
+!**/figures/**
+
+# Embedded upstream library (radical-cybertools/ROSE): its own git repo,
+# consumed via `pip install ./ROSE` -- not tracked by this parent repo.
+/ROSE/

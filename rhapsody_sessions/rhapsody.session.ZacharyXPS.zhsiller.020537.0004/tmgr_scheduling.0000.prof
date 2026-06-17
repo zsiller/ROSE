@@ -1,6 +1,0 @@
-#time,event,comp,thread,uid,state,msg
-1774479671.9802265,sync_abs,tmgr_scheduling.0000,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1774479671.9800913:1774479671.7306762:ntp
-1774479671.9814105,comp_start,tmgr_scheduling.0000,MainThread,tmgr_scheduling.0000,,
-#time,event,comp,thread,uid,state,msg
-1774479672.0472164,sync_abs,tmgr_scheduling.0000,Thread-2 (_work_loop),,,ZacharyXPS.localdomain:172.30.123.79:1774479672.0004122:1774479671.750997:ntp
-1774479672.0474267,component_init,tmgr_scheduling.0000,Thread-2 (_work_loop),,,

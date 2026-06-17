@@ -20,13 +20,12 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from inference.common import (  # noqa: E402
+from helpers.inverse_common import (  # noqa: E402
     exact_density_on_cells, load_surrogate,
 )
 
-N_FIELD = 256 
-PARAM_NAMES = ["p_high", "p_low", "rho_high", "rho_low"]
-T_FINAL = 6.0e-4 
+from helpers.inverse_common import N_FIELD, PARAM_NAMES, T_FINAL  # noqa: E402
+
 SURROGATE_PKL = ROOT / "training_runs" / "shock_tube" / "run_200" / "wf_0" / "surrogate.pkl"
 
 HERE = Path(__file__).resolve().parent
@@ -39,7 +38,6 @@ OUT = HERE / "surrogate_obs_dist.png"
 CRPS_DAT = HERE / "surrogate_crps.dat"
 
 MAX_SAMPLES = 1500
-BURN = 0.2
 SEED = 0
 NO_PLOT = False
 
@@ -61,7 +59,7 @@ def load_cell_indices(path: Path, n_obs: int) -> np.ndarray:
     return np.asarray(cell_idx, dtype=int)
 
 
-def load_chain_params(path: Path, *, burn: float = BURN,
+def load_chain_params(path: Path, *,
                       max_samples: int = MAX_SAMPLES,
                       seed: int = SEED) -> np.ndarray:
     """Read Sod-param columns from a Dakota exported chain file."""
@@ -69,11 +67,11 @@ def load_chain_params(path: Path, *, burn: float = BURN,
         header = fh.readline().lstrip("%").split()
     cols = [header.index(name) for name in PARAM_NAMES]
     chain = np.atleast_2d(np.loadtxt(path, skiprows=1, usecols=cols))
-    post = chain[int(burn * chain.shape[0]):]
+    
     rng = np.random.default_rng(seed)
-    if post.shape[0] > max_samples:
-        post = post[rng.choice(post.shape[0], max_samples, replace=False)]
-    return post
+    if chain.shape[0] > max_samples:
+        chain = chain[rng.choice(chain.shape[0], max_samples, replace=False)]
+    return chain
 
 
 def surrogate_fields(params: np.ndarray, t: float, pkl: Path) -> np.ndarray:
@@ -158,7 +156,7 @@ if __name__ == "__main__":
     print(f"[obs]    {OBS}: m = {obs.size} cells {cell_idx.tolist()}")
     print(f"[cells]  {CELLS}")
     print(f"[chain]  {CHAIN}: {chain.shape[0]} draws evaluated "
-          f"(burn {BURN:.0%}, cap {MAX_SAMPLES})")
+          f"(cap {MAX_SAMPLES})")
     print(f"[surrogate] {SURROGATE}")
     print(f"[result] pred shape = {pred.shape}")
     print(f"[result] surrogate-pred mean RMSE vs observed = "

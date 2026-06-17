@@ -1,7 +1,0 @@
-#time,event,comp,thread,uid,state,msg
-1774480674.6073143,sync_abs,cmgr.0001,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1774480674.6072173:1774480674.3396363:ntp
-1774480674.6075032,init2,cmgr.0001,MainThread,cmgr.0001,,/home/zhsiller/research/ROSE/rhapsody.session.ZacharyXPS.zhsiller.020537.0005
-1774480674.6090586,start_bridges_start,cmgr.0001,MainThread,cmgr.0001,,
-1774480675.7186196,start_bridges_stop,cmgr.0001,MainThread,cmgr.0001,,
-1774480675.7187936,start_components_start: %s,cmgr.0001,MainThread,cmgr.0001,,
-1774480676.9629121,start_components_stop,cmgr.0001,MainThread,cmgr.0001,,

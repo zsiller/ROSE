@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
-# Dakota fork-interface wrapper: run sod_driver.py under the project venv so
-# numpy / the Sod solvers are importable. Dakota appends the params and results
-# filenames, which we forward verbatim via "$@".
+# Dakota fork wrapper: run sod_driver.py with the project venv's Python (so numpy
+# and the Sod solvers import without activating the venv in Dakota's env).
+# Dakota appends <params_file> <results_file>, which we forward via "$@".
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(dirname "$HERE")"
-
-# Use the venv python without needing the venv activated in Dakota's env.
-PY="$ROOT/rose_env/bin/python"
-
-exec "$PY" "$HERE/sod_driver.py" "$@"
+exec "$HERE/../rose_env/bin/python" "$HERE/sod_driver.py" "$@"

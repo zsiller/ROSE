@@ -59,19 +59,16 @@ from pathlib import Path
 
 import numpy as np
 
-# This script lives two levels under the repo root (inference/mcmc/).
-_ROOT = Path(__file__).resolve().parents[2]
+# This script lives one level under the repo root (MCMC/).
+_ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from inference.common import (  # noqa: E402
+from MCMC.mcmc_common import (  # noqa: E402
     ENSEMBLE_DIR, FORWARD_MODES, N_FIELD, N_PARAMS, OBS_ERROR, PARAM_NAMES,
     TRUTH,
-    build_observations, load_ensemble, make_forward, prior_bounds,
+    build_observations, load_ensemble, make_forward, make_plots, prior_bounds,
 )
-# Reuse mcmc_infer's plotting verbatim so the RW-Metropolis and HMC runs are
-# plotted alike.
-from inference.mcmc.mcmc_infer import make_plots  # noqa: E402
 
 
 # --------------------------------------------------------------------------- #

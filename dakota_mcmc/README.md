@@ -5,14 +5,17 @@ Bayesian calibration of the 4 Sod initial-condition parameters
     m = [p_high, p_low, rho_high, rho_low]
 
 from final-time (`t = 6e-4`) density observations, driven by **Sandia Dakota**.
-Shared logic lives in ``common.py`` (observations, forward models, plots);
-``plots.py`` holds surrogate-validation figures (PIT, violins).
+Dakota's `make_plots` lives in `common.py`; the problem constants, observation
+builder, forward models and ensemble loader are imported from the global
+`helpers/inverse_common.py` (the single source of truth shared with `EnKF/` and
+`MCMC/`). `plots.py` holds surrogate-validation figures (PIT, violins).
 
 ## Pieces
 
 | File | Role |
 |---|---|
-| `common.py` | Constants, `build_observations`, forward models, `make_plots` |
+| `common.py` | Dakota `make_plots`; re-exports the shared inverse-problem layer |
+| `../helpers/inverse_common.py` | Global constants, `build_observations`, forward models, `load_ensemble` (shared with `EnKF/` + `MCMC/`) |
 | `plots.py` | Surrogate pushforward / PIT validation figures |
 | `write_observations.py` | Write `sod_obs.dat` + `sod_cells.npy` for a param set |
 | `run_mcmc.py` | Stage inputs, run Dakota, optional `--plot` |
@@ -63,9 +66,10 @@ python dakota_mcmc/run_mcmc.py \
   `bayes_calibration queso`/`gpmsa` are unavailable. DREAM is Dakota's native
   differential-evolution MCMC and needs no external library. Swapping back to
   `queso dram` only requires a GSL-enabled rebuild.
-* The observation mask (`OBS_EVERY=15`, `MARGIN=4` → 16 interior cells) is
-  duplicated as constants in `sod_driver.py` **and** `gen_calibration_data.py`;
-  keep them in sync (or regenerate `sod_obs.dat` after any change).
+* The observation mask (`OBS_EVERY=15`, `MARGIN=4` → 16 interior cells) is built
+  once by `write_observations.py` (via the shared `build_observations`) and
+  written to `sod_obs.dat` + `sod_cells.npy`; `sod_driver.py` only *loads*
+  `sod_cells.npy`, so there are no duplicated constants to keep in sync.
 * `variance_type 'scalar'` in `sod_bayes.in` means the trailing 16 columns of
   `sod_obs.dat` are **variances** (σ² = `OBS_ERROR`² = 1e-4), one per cell.
 * Pressures (`p_high`, `p_low`) are weakly constrained by density observations —

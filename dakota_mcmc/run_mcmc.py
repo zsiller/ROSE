@@ -131,7 +131,8 @@ method
   bayes_calibration queso
     chain_samples = {chain_samples} seed = {seed}
     export_chain_points_file '{chain_name}'
-    adaptive_metropolis
+    dram
+    burn_in_samples = {int(0.2 * chain_samples)}  # 20% burn-in
     proposal_covariance
       file 'prop_cov.dat'
         matrix

@@ -1,3 +1,0 @@
-#time,event,comp,thread,uid,state,msg
-1774479670.4969172,sync_abs,tmgr_staging_input_queue,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1774479670.4968264:1774479670.2474113:ntp
-1774479670.4974008,bridge_start,tmgr_staging_input_queue,MainThread,tmgr_staging_input_queue,,

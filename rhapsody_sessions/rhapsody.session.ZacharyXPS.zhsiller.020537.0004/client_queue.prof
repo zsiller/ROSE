@@ -1,3 +1,0 @@
-#time,event,comp,thread,uid,state,msg
-1774479669.8999767,sync_abs,client_queue,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1774479669.899747:1774479669.6503317:ntp
-1774479669.9004838,bridge_start,client_queue,MainThread,client_queue,,

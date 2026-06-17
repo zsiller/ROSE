@@ -2,7 +2,7 @@
 """Write Dakota calibration data and observation cell mask for a Sod param set.
 
 Given the 4 ICs ``[p_high, p_low, rho_high, rho_low]``, build the interior
-observation mask (same logic as ``gen_calibration_data.py``) and write:
+observation mask (via the shared ``build_observations``) and write:
 
   * ``sod_obs.dat``   — one freeform row: densities then per-cell variances
   * ``sod_cells.npy`` — integer cell indices loaded by ``sod_driver.py``
@@ -30,7 +30,7 @@ if str(HERE) not in sys.path:
 from common import OBS_ERROR, PARAM_NAMES, build_observations  # noqa: E402
 
 OBS_EVERY = 15
-MARGIN = 4
+MARGIN = 5
 DEFAULT_OBS_OUT = HERE / "sod_obs.dat"
 DEFAULT_CELLS_OUT = HERE / "sod_cells.npy"
 

@@ -1,15 +1,15 @@
 """Shared infrastructure for the self-contained EnKF / ensemble work in ``EnKF/``.
 
-Everything the shock-tube ensemble drivers in this folder need lives here, so the
-folder stands on its own (the only outside dependency is the physics solvers in
-``task_simulations/Shock_Tube/``):
+The problem constants, observation builder and forward models come from the
+global ``helpers.inverse_common`` (shared with ``MCMC/`` and ``dakota_mcmc/``) and
+are re-exported here, so ``run_enkf.py`` keeps importing them from
+``ensemble_common``. This module then adds only what is unique to the ensemble
+work:
 
-  - problem constants (TRUTH, T_FINAL, N_FIELD, the augmented-state layout);
-  - the observation builder (region-interior cells, never on a discontinuity);
-  - the prior helpers (``gen_ensemble`` forward-solves perturbed ICs to disk;
-    ``load_ensemble`` reads the resulting HDF5 files into an augmented state);
+  - the prior ensemble helpers (``gen_ensemble`` forward-solves perturbed ICs to
+    disk; ``load_ensemble`` reads the resulting HDF5 files into an augmented state);
   - the bridge to the compiled C++ EnKF analysis step (``enkf_filter_cpp``);
-  - the shared exact / prior-ensemble / posterior-mean comparison figure.
+  - parameter recording and the comparison / parameter-recovery figures.
 
 Augmented state (261 rows): the 4 Sod ICs + time stacked on the 256-cell density
 
@@ -29,74 +29,27 @@ from pathlib import Path
 
 import numpy as np
 
-# This module lives one level under the repo root (EnKF/); make the physics
-# solvers importable whether we run from EnKF/ or the repo root.
+# This module lives one level under the repo root (EnKF/).
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from task_simulations.Shock_Tube.sod_exact import (  # noqa: E402
-    exact_density_on_cells,
-    shock_features,
+# Shared problem layout + observation model + forward models (single source of
+# truth); re-exported so run_enkf.py keeps importing them from ensemble_common.
+from helpers.inverse_common import (  # noqa: E402,F401
+    DEFAULT_DATA_POINT,
+    FIELD_OFFSET,
+    N_FIELD,
+    N_PARAMS,
+    N_STATE,
+    OBS_ERROR,
+    PARAM_NAMES,
+    T_FINAL,
+    TRUTH,
+    build_observations,
+    euler_density,
+    load_ensemble,
 )
-
-# --- Problem layout (matches EnKF/enkf_step.cpp) ---------------------------
-N_PARAMS = 4                       # p_high, p_low, rho_high, rho_low
-N_FIELD = 256                      # density cells
-FIELD_OFFSET = N_PARAMS + 1        # density starts at row 5 (after 4 ICs + t)
-N_STATE = FIELD_OFFSET + N_FIELD   # 261
-T_FINAL = 6.0e-4                   # shock-tube final snapshot time
-
-PARAM_NAMES = ["p_high", "p_low", "rho_high", "rho_low"]
-
-# --- Truth the observations are synthesized from --- EASY TO CHANGE --------
-TRUTH = np.array([1.0e5, 1.0e4, 1.0, 0.125])
-DEFAULT_DATA_POINT = list(TRUTH)   # mean the generated ensemble perturbs around
-
-OBS_ERROR = 0.01                   # default observation noise std
-
-
-# --------------------------------------------------------------------------- #
-# Observations: exact Sod density in the 5 region INTERIORS, never on a front.
-# --------------------------------------------------------------------------- #
-def build_observations(obs_every: int = 15, margin: int = 4, *,
-                       truth: np.ndarray | None = None, t: float = T_FINAL,
-                       obs_error: float = OBS_ERROR,
-                       seed: int | None = None,
-                       ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Synthesize observations from the exact solution at time ``t``, placed
-    ONLY in the interiors of the 5 Sod regions -- never on the discontinuities.
-
-    A baseline of every ``obs_every``-th cell is taken, then every cell within
-    ``margin`` of any feature (rarefaction head/tail, contact, shock) is
-    EXCLUDED, so observations sit where the values are well-determined.
-    Observing on a front instead injects huge, ambiguous innovations (each
-    ensemble member's shock sits somewhere else), which drives overshoot.
-
-    At each observed cell the data are ``exact_rho + N(0, obs_error^2)``, matching
-    the Gaussian likelihood assumed by the samplers and Dakota calibration.
-
-    Returns ``(H, obs, cell_idx, exact_rho)`` with H the (N_STATE x m)
-    augmented-state observation operator and ``exact_rho`` the unperturbed field.
-    """
-    truth = TRUTH if truth is None else np.asarray(truth, dtype=float)
-    exact_rho = exact_density_on_cells(truth, t, N_FIELD)
-    features = shock_features(truth, t)
-
-    mask = np.zeros(N_FIELD, dtype=bool)
-    mask[::obs_every] = True                                  # baseline coverage
-    for fx in features:
-        c0 = int(np.clip(round(fx * N_FIELD - 0.5), 0, N_FIELD - 1))
-        lo, hi = max(0, c0 - margin), min(N_FIELD - 1, c0 + margin)
-        mask[lo:hi + 1] = False                               # keep clear of the jump
-    cell_idx = np.flatnonzero(mask)
-
-    m = cell_idx.size
-    H = np.zeros((N_STATE, m))
-    H[FIELD_OFFSET + cell_idx, np.arange(m)] = 1.0
-    rng = np.random.default_rng(seed)
-    obs = exact_rho[cell_idx] + rng.normal(0.0, obs_error, size=m)
-    return H, obs, cell_idx, exact_rho
 
 
 # --------------------------------------------------------------------------- #
@@ -174,33 +127,6 @@ def gen_ensemble(n_members: int, out_dir: Path | str, *,
         params = [d * (1.0 + rng.normal(0.0, spread)) for d in defaults]
         run_euler_shock_tube(params, out_dir)
     return load_ensemble(out_dir)
-
-
-def load_ensemble(directory: Path | str) -> np.ndarray:
-    """Load the HDF5 ensemble into an (N_STATE x Ne) augmented-state matrix.
-
-    Each file is a sim-format trajectory (rho/momentum/energy shaped
-    (n_snap, nx) + the 4 IC attrs); the LAST snapshot supplies the local
-    density state and its time the augmented ``t`` row.
-    """
-    import h5py
-
-    files = sorted(Path(directory).glob("*.h5"))
-    if not files:
-        raise FileNotFoundError(f"no .h5 ensemble files in {directory}")
-
-    X = np.zeros((N_STATE, len(files)))
-    for j, path in enumerate(files):
-        with h5py.File(path, "r") as f:
-            rho = np.atleast_2d(np.asarray(f["rho"], dtype=float))
-            t = np.atleast_1d(np.asarray(f["t"], dtype=float))
-            X[0, j] = float(f.attrs["p_high"])
-            X[1, j] = float(f.attrs["p_low"])
-            X[2, j] = float(f.attrs["rho_high"])
-            X[3, j] = float(f.attrs["rho_low"])
-        X[N_PARAMS, j] = t[-1]
-        X[FIELD_OFFSET:, j] = rho[-1]
-    return X
 
 
 # --------------------------------------------------------------------------- #
@@ -324,23 +250,6 @@ def plot_field_comparison(*, exact, members, post_mean, obs_x, obs_y,
 
 
 # --------------------------------------------------------------------------- #
-# Euler forward model (in-process) -- used to push a parameter vector to a
-# density field for the parameter-recovery comparison figure.
-# --------------------------------------------------------------------------- #
-GAMMA = 1.4
-
-
-def euler_density(params, t: float = T_FINAL, *, nx: int = N_FIELD) -> np.ndarray:
-    """Numerical Sod density at time ``t`` via the 1D MUSCL-HLLC Euler solver."""
-    from task_simulations.Shock_Tube.sod_euler import EulerSolver1D
-    p = np.asarray(params, dtype=float)
-    solver = EulerSolver1D(nx=nx, xmin=0.0, xmax=1.0, gamma=GAMMA, cfl=0.5)
-    solver.set_sod_like(rho_high=p[2], p_high=p[0], rho_low=p[3], p_low=p[1], x0=0.5)
-    solver.step_to(t)
-    return solver.U[0]
-
-
-# --------------------------------------------------------------------------- #
 # Parameter-recovery figure: Euler density forward-solved from the EnKF-predicted
 # params vs Euler from the TRUE params. Answers "do the recovered parameters
 # reproduce the truth's field when pushed back through the forward model?"
@@ -357,14 +266,14 @@ def plot_param_forward_compare(pred_params, save_path, *, prior_params=None,
     pred_params = np.asarray(pred_params, dtype=float)[:N_PARAMS]
     truth = np.asarray(truth, dtype=float)[:N_PARAMS]
 
-    rho_truth = euler_density(truth, t)
-    rho_pred = euler_density(pred_params, t)
+    rho_truth = euler_density(truth, t, in_process=True)
+    rho_pred = euler_density(pred_params, t, in_process=True)
     rmse = float(np.sqrt(np.mean((rho_pred - rho_truth) ** 2)))
 
     rho_prior = None
     if prior_params is not None:
         prior_params = np.asarray(prior_params, dtype=float)[:N_PARAMS]
-        rho_prior = euler_density(prior_params, t)
+        rho_prior = euler_density(prior_params, t, in_process=True)
         prior_rmse = float(np.sqrt(np.mean((rho_prior - rho_truth) ** 2)))
 
     x = np.arange(N_FIELD) / N_FIELD

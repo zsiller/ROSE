@@ -1,3 +1,0 @@
-#time,event,comp,thread,uid,state,msg
-1774479562.5221293,sync_abs,rhapsody.session.ZacharyXPS.zhsiller.020537.0003,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1774479562.5216107:1774479562.27321:ntp
-1774479562.5222991,session_start,rhapsody.session.ZacharyXPS.zhsiller.020537.0003,MainThread,rhapsody.session.ZacharyXPS.zhsiller.020537.0003,,

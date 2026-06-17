@@ -1,8 +1,0 @@
-#time,event,comp,thread,uid,state,msg
-1775188963.1643121,sync_abs,tmgr_staging_input.0000,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1775188963.1640513:1775188963.1367753:ntp
-1775188963.1652093,comp_start,tmgr_staging_input.0000,MainThread,tmgr_staging_input.0000,,
-#time,event,comp,thread,uid,state,msg
-1775188963.2408168,sync_abs,tmgr_staging_input.0000,Thread-2 (_work_loop),,,ZacharyXPS.localdomain:172.30.123.79:1775188963.1982722:1775188963.1709962:ntp
-1775188963.2409744,component_init,tmgr_staging_input.0000,Thread-2 (_work_loop),,,
-1775188967.5133581,advance,tmgr_staging_input.0000,Thread-2 (_work_loop),task.000001,TMGR_STAGING_INPUT,
-1775188967.5136914,advance,tmgr_staging_input.0000,Thread-2 (_work_loop),task.000001,AGENT_STAGING_INPUT_PENDING,

@@ -36,7 +36,7 @@ if str(HERE) not in sys.path:
 
 from scores.probability import crps_for_ensemble  # noqa: E402
 
-from inference.common import exact_density_on_cells  # noqa: E402
+from helpers.inverse_common import exact_density_on_cells  # noqa: E402
 import validation as val  # noqa: E402  (loaders + constants + surrogate eval)
 
 CRPS_METHOD = "fair"          # "fair" (unbiased) or "ecdf" (exact empirical CDF)
