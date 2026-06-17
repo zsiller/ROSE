@@ -1,0 +1,1 @@
+- [EnKF ensemble plan](enkf-ensemble-plan.md) — shock-tube EnKF ensemble: bootstrap source now, data_dir + surrogate eventually

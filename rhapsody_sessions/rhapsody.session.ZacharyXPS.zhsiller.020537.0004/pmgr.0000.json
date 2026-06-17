@@ -1,0 +1,105 @@
+{
+    "cfg": {
+        "_type": "Config",
+        "bridges": {
+            "_type": "Config",
+            "pmgr_launching_queue": {
+                "_type": "Config",
+                "channel": "pmgr_launching_queue",
+                "cmgr": "cmgr.0002",
+                "cmgr_url": "tcp://172.30.123.79:10028",
+                "debug_lvl": null,
+                "kind": "queue",
+                "log_lvl": null,
+                "owner": "pmgr.0000",
+                "path": "/home/zhsiller/research/ROSE/rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+                "reg_addr": "tcp://172.30.123.79:10000",
+                "sid": "rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+                "uid": "pmgr_launching_queue"
+            }
+        },
+        "client_sandbox": "/home/zhsiller/research/ROSE",
+        "components": {
+            "_type": "Config",
+            "pmgr_launching": {
+                "_type": "Config",
+                "base": "/home/zhsiller/research/ROSE",
+                "cmgr": null,
+                "cmgr_url": "tcp://172.30.123.79:10028",
+                "count": 1,
+                "debug_lvl": null,
+                "kind": "pmgr_launching",
+                "log_lvl": null,
+                "owner": "pmgr.0000",
+                "path": "/home/zhsiller/research/ROSE/rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+                "proxy_url": "tcp://172.30.123.79:10001",
+                "reg_addr": "tcp://172.30.123.79:10000",
+                "sid": "rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+                "uid": "pmgr_launching.0000"
+            }
+        },
+        "db_poll_sleeptime": 1.0,
+        "heartbeat": {
+            "_type": "Config",
+            "interval": 10.0,
+            "timeout": 600.0
+        },
+        "owner": "pmgr.0000",
+        "path": "/home/zhsiller/research/ROSE/rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+        "reg_addr": "tcp://172.30.123.79:10000",
+        "sid": "rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+        "uid": "pmgr.0000"
+    },
+    "pilots": [
+        {
+            "client_sandbox": "/home/zhsiller/research/ROSE",
+            "description": {
+                "access_schema": null,
+                "app_comm": [],
+                "backup_nodes": 0,
+                "cleanup": false,
+                "cores": 0,
+                "enable_ep": false,
+                "exit_on_error": false,
+                "gpus": 0,
+                "input_staging": [],
+                "job_name": null,
+                "memory": 0,
+                "nodes": 0,
+                "output_staging": [],
+                "prepare_env": {},
+                "project": null,
+                "queue": null,
+                "reconfig_src": null,
+                "resource": "local.localhost",
+                "runtime": 30,
+                "sandbox": null,
+                "services": [],
+                "uid": null
+            },
+            "endpoint_fs": "file://localhost/",
+            "js_hop": "fork://localhost",
+            "js_url": "fork://localhost",
+            "log": null,
+            "nodelist": null,
+            "pilot_sandbox": "file://localhost/home/zhsiller/radical.pilot.sandbox/rhapsody.session.ZacharyXPS.zhsiller.020537.0004/pilot.0000/",
+            "pmgr": "pmgr.0000",
+            "resource": "local.localhost",
+            "resource_details": null,
+            "resource_sandbox": "file://localhost/home/zhsiller/radical.pilot.sandbox",
+            "resources": {
+                "cpu": 0,
+                "gpu": 0
+            },
+            "session": "rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+            "session_sandbox": "file://localhost/home/zhsiller/radical.pilot.sandbox/rhapsody.session.ZacharyXPS.zhsiller.020537.0004",
+            "state": "CANCELED",
+            "stderr": null,
+            "stdout": null,
+            "type": "pilot",
+            "uid": "pilot.0000"
+        }
+    ],
+    "type": "pmgr",
+    "uid": "pmgr.0000"
+}

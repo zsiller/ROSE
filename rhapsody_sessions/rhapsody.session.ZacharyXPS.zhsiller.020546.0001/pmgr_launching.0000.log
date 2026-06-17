@@ -1,0 +1,4 @@
+1775188966.984 : pmgr_launching.0000  : 34649 : 128061595627776 : DEBUG    : pwatcher create
+1775188966.984 : pmgr_launching.0000  : 34649 : 128061558023872 : DEBUG    : pwatcher started
+1775188966.985 : pmgr_launching.0000  : 34649 : 128061595627776 : DEBUG    : add pid 34325 to watchlist
+1775188966.985 : pmgr_launching.0000  : 34649 : 128061595627776 : DEBUG    : add pid 34649 to watchlist

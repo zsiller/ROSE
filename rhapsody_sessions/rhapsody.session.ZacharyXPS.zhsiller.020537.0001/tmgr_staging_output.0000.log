@@ -1,0 +1,4 @@
+1774470226.296 : tmgr_staging_output.0000 : 4169  : 139480645353728 : DEBUG    : pwatcher create
+1774470226.297 : tmgr_staging_output.0000 : 4169  : 139480607516352 : DEBUG    : pwatcher started
+1774470226.297 : tmgr_staging_output.0000 : 4169  : 139480645353728 : DEBUG    : add pid 3948 to watchlist
+1774470226.298 : tmgr_staging_output.0000 : 4169  : 139480645353728 : DEBUG    : add pid 4169 to watchlist

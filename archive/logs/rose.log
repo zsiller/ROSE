@@ -1,0 +1,117 @@
+11:10:28 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:10:28 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:10:29 | INFO    | rose | Running 1 simulation sample(s): new_sample.pkl
+11:12:51 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:12:51 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:12:52 | INFO    | rose | Running 1 simulation sample(s): new_sample.pkl
+11:14:17 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:14:17 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:14:18 | INFO    | rose | Running 1 simulation sample(s): new_sample.pkl
+11:15:28 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:15:28 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:15:29 | INFO    | rose | No samples found in X.pkl
+11:15:29 | INFO    | rose | Running 1 simulation sample(s): new_sample.pkl
+11:16:37 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:16:37 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:16:38 | INFO    | rose | No samples found in X.pkl
+11:16:38 | INFO    | rose | Running 1 simulation sample(s): new_sample.pkl
+11:17:20 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:17:20 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:20:01 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:20:01 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:20:02 | INFO    | rose | Running 1 simulation sample(s): [[5.0]]
+11:21:05 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:21:05 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:21:06 | INFO    | rose | Running 1 simulation sample(s): [[5.0]]
+11:22:21 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:22:21 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:22:22 | INFO    | rose | Running 1 simulation sample(s): [[5.0]]
+11:23:24 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:23:24 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:24:37 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:24:37 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:27:26 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:27:26 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:27:26 | ERROR   | rose | Samples file is empty: []
+11:32:07 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+11:32:07 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+11:32:08 | INFO    | rose | Running 1 simulation sample(s): [[5.0]]
+14:00:28 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+14:00:28 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+15:16:51 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+15:20:48 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+15:21:25 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+15:31:17 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+15:31:17 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+15:32:43 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+15:32:43 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+15:32:43 | INFO    | rose | Workflow completed in 0.003767728805541992 seconds
+15:33:33 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+15:33:33 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+15:33:33 | INFO    | rose | Workflow completed in 0.002583026885986328 seconds
+16:05:26 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:05:26 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:05:26 | INFO    | rose | Workflow completed in 6.914138793945312e-05 seconds
+16:06:13 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:06:13 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:15:28 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:15:28 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:15:28 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+16:19:06 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:19:06 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:19:07 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+16:33:17 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:33:17 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:33:18 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+16:36:27 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:36:27 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:36:27 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+16:36:27 | INFO    | rose | Creating new sample history file: /home/zhsiller/research/ROSE/training_runs/run_1/rc_1/sample_history.pkl
+16:39:30 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:39:30 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:39:31 | ERROR   | rose | Samples file not found: /home/zhsiller/research/ROSE/training_runs/run_2/rc_2/new_sample.pkl
+16:43:04 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:43:22 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:43:22 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:43:23 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+16:43:23 | INFO    | rose | Creating new sample history file: /home/zhsiller/research/ROSE/training_runs/run_2/rc_2/sample_history.pkl
+16:45:46 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:45:46 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:45:47 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+16:45:48 | INFO    | rose | Creating new sample history file: /home/zhsiller/research/ROSE/training_runs/cdr/run_1/rc_1/sample_history.pkl
+16:48:08 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:48:08 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:48:09 | INFO    | rose | Running 4 simulation sample(s): [[10000.0, 100000.0, 0.125, 1.0]]
+16:48:09 | INFO    | rose | Creating new sample history file: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_1/rc_1/sample_history.pkl
+16:49:53 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:49:53 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:50:25 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:50:25 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:50:25 | INFO    | rose | Running 4 simulation sample(s): [[10000.0, 100000.0, 0.125, 1.0]]
+16:54:54 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+16:54:54 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+16:54:55 | INFO    | rose | Running 4 simulation sample(s): [[10000.0, 100000.0, 0.125, 1.0]]
+16:54:55 | INFO    | rose | Running simulation for sample: [1.00e+04 1.00e+05 1.25e-01 1.00e+00]
+17:00:15 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+17:00:15 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+17:00:16 | INFO    | rose | Running 4 simulation sample(s): [[10000.0, 100000.0, 0.125, 1.0]]
+17:00:16 | INFO    | rose | Running simulation for sample: [1.00e+04 1.00e+05 1.25e-01 1.00e+00]
+17:00:16 | INFO    | rose | Appending to existing sample history file: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_1/rc_1/sample_history.pkl
+09:47:28 | INFO    | rose | Running 1 simulation sample(s): [[1.0]]
+09:47:28 | INFO    | rose | Running simulation for sample: [1.]
+09:47:28 | INFO    | rose | Creating new sample history file: /home/zhsiller/research/ROSE/training_runs/cdr/smoke_ctx/r1/sample_history.pkl
+09:47:42 | INFO    | rose | Active learning: method=uncertainty, n_select=1
+10:03:06 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+10:03:06 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+10:03:07 | INFO    | rose | Running simulation for context: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_2/rc_1
+10:03:07 | INFO    | rose | Running 4 simulation sample(s): [[10000.0, 100000.0, 0.125, 1.0]]
+10:03:07 | INFO    | rose | Running simulation for sample: [1.00e+04 1.00e+05 1.25e-01 1.00e+00]
+10:03:08 | INFO    | rose | Creating new sample history file: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_2/rc_1/sample_history.pkl
+10:05:06 | INFO    | rose | Logging to /home/zhsiller/research/ROSE/logs
+10:05:06 | INFO    | rose | Starting workflow (al_method=uncertainty, max_iter=11, threshold MSE=1e-05)
+10:05:08 | INFO    | rose | Running simulation for context: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_2/rc_1
+10:05:08 | INFO    | rose | Running 4 simulation sample(s): [[10000.0, 100000.0, 0.125, 1.0]]
+10:05:08 | INFO    | rose | Running simulation for sample: [1.00e+04 1.00e+05 1.25e-01 1.00e+00]
+10:05:08 | INFO    | rose | Simulation completed for context: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_2/rc_1/data
+10:05:08 | INFO    | rose | Appending to existing sample history file: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_2/rc_1/sample_history.pkl
+10:05:08 | INFO    | rose | Sample history completed for context: /home/zhsiller/research/ROSE/training_runs/shock_tube/run_2/rc_1/sample_history.pkl

@@ -1,0 +1,8 @@
+# large data / model artifacts (exceed GitHub's 100MB limit)
+dakota.tar.gz
+training_runs/
+training_data/
+
+# python build artifacts
+__pycache__/
+*.pyc

@@ -1,0 +1,146 @@
+% The Bayesian inverse problem for the 1D shock tube that BOTH the EnKF and the
+% MCMC sampler are trying to solve. Forward problem (top): unknown boundary
+% params m generate a final-time density field, observed sparsely with noise.
+% Inverse problem (middle): given the noisy observations, recover the posterior
+% over m via Bayes' rule. Two solvers (bottom): the EnKF gives a Gaussian/linear
+% approximation of that posterior in one (or a few) ensemble updates; MCMC samples
+% the full (non-Gaussian) posterior. Same target, two approximations.
+\documentclass[border=8pt]{standalone}
+\usepackage{tikz}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=2.6mm]},
+  parbox/.style  = {draw=black, line width=0.9pt, fill=orange!18,
+                    inner sep=6pt, align=center},
+  fwdbox/.style  = {draw=black, line width=0.9pt, fill=blue!12,
+                    inner sep=6pt, align=center},
+  obsbox/.style  = {draw=black, line width=0.9pt, fill=gray!18,
+                    inner sep=6pt, align=center},
+  bayesbox/.style= {draw=black, line width=1.0pt, fill=yellow!18,
+                    inner sep=8pt, align=center},
+  enkfbox/.style = {draw=black, line width=0.9pt, fill=teal!22,
+                    inner sep=6pt, align=center, text width=58mm},
+  mcmcbox/.style = {draw=black, line width=0.9pt, fill=purple!16,
+                    inner sep=6pt, align=center, text width=58mm},
+  postbox/.style = {draw=black, line width=0.9pt, fill=green!22,
+                    inner sep=6pt, align=center},
+  flow/.style    = {-{Stealth[length=2.6mm]}, line width=0.9pt},
+  invflow/.style = {-{Stealth[length=3.2mm]}, line width=1.4pt, red!70!black},
+]
+
+% =====================================================================
+% ===  FORWARD PROBLEM  (data generation)  ============================
+% =====================================================================
+\node[font=\bfseries\large] (fwdtitle) at (0,0)
+  {Forward problem \ \ {\normalfont\itshape (how the data is generated)}};
+
+% --- unknown parameters ----------------------------------------------
+\node[parbox, below=8mm of fwdtitle.west, anchor=north west] (params) {
+  \textbf{Unknown parameters}\\[3pt]
+  $\mathbf{\theta}=(p_{\mathrm{hi}},\,p_{\mathrm{lo}},\,
+               \rho_{\mathrm{hi}},\,\rho_{\mathrm{lo}})$\\[2pt]
+  {\footnotesize Analytical Solu}};
+
+% --- forward model ---------------------------------------------------
+\node[fwdbox, right=14mm of params] (forward) {
+  \textbf{Forward model} \ $\mathbf{g}(\mathbf{m})$\\[3pt]
+  Euler / exact Sod\\
+  evolve to final time $t_f$\\[2pt]
+  {\footnotesize $\rho(x,t_f;\mathbf{m})$}};
+
+% --- true state ------------------------------------------------------
+\node[fwdbox, right=14mm of forward] (state) {
+  \textbf{True state}\\[3pt]
+  density field\\ $\rho(x,t_f)$\\[2pt]
+  {\footnotesize 256 cells}};
+
+% --- observations ----------------------------------------------------
+\node[obsbox, right=14mm of state] (obs) {
+  \textbf{Observations}\\[3pt]
+  $\mathbf{y}^\circ = H\,\rho(x,t_f) + \boldsymbol{\eta}$\\[2pt]
+  $\boldsymbol{\eta}\sim\mathcal{N}(0,\sigma^2 I)$\\[2pt]
+  {\footnotesize sparse cells, fronts excluded}};
+
+\draw[flow] (params)  -- (forward);
+\draw[flow] (forward) -- (state);
+\draw[flow] (state)   -- (obs);
+
+% =====================================================================
+% ===  INVERSE PROBLEM  (Bayes)  ======================================
+% =====================================================================
+\node[font=\bfseries\large, below=20mm of forward.south west, anchor=north west]
+  (invtitle)
+  {Inverse problem \ \ {\normalfont\itshape (recover the parameters)}};
+
+\node[bayesbox, below=8mm of invtitle.west, anchor=north west, text width=150mm]
+  (bayes) {
+  \textbf{Bayes' rule: \ the posterior is the target}\\[5pt]
+  $\displaystyle
+   \underbrace{\pi(\mathbf{m}\mid \mathbf{y}^\circ)}_{\text{posterior}}
+   \ \propto\
+   \underbrace{\mathcal{N}\!\big(\mathbf{y}^\circ;\,\mathbf{g}(\mathbf{m}),\,R\big)}
+              _{\text{likelihood: data fit, } R=\sigma^2 I}
+   \ \cdot\
+   \underbrace{p(\mathbf{m})}_{\text{prior: ensemble box}}$};
+
+% the inverse arrow: data flows BACK to the unknown parameters
+\draw[invflow] (obs.south) |- ($(bayes.north)+(3.2,0)$);
+\node[red!70!black, font=\footnotesize\itshape, right=1mm]
+  at ($(obs.south)+(0,-7mm)$) {given $\mathbf{y}^\circ$, infer $\mathbf{m}$};
+
+% =====================================================================
+% ===  TWO SOLVERS  ===================================================
+% =====================================================================
+\node[font=\bfseries\large, below=12mm of bayes.west, anchor=north west]
+  (soltitle)
+  {Two solvers, one target};
+
+% --- EnKF ------------------------------------------------------------
+\node[enkfbox, below=8mm of soltitle.west, anchor=north west] (enkf) {
+  \textbf{EnKF} \ — ensemble Kalman update\\[4pt]
+  ensemble $\{\mathbf{m}_j\}_{j=1}^{N}$, perturbed obs\\[3pt]
+  $\mathbf{m}_j^{a}=\mathbf{m}_j^{f}
+     + K\big(\mathbf{y}^\circ_j-\mathbf{g}(\mathbf{m}_j^{f})\big)$\\[2pt]
+  $K=P_f H^{\!\top}\!\big(HP_fH^{\!\top}\!+R\big)^{-1}$\\[4pt]
+  {\footnotesize \emph{Gaussian / linearized} approximation;\\
+   one (or few) cheap updates}};
+
+% --- MCMC ------------------------------------------------------------
+\node[mcmcbox, right=20mm of enkf] (mcmc) {
+  \textbf{MCMC} \ — adaptive RW-Metropolis\\[4pt]
+  propose $\mathbf{m}'\!\sim\mathcal{N}(\mathbf{m}^{(k)},s^2C)$\\[3pt]
+  accept w.p.\ $\min\!\Big(1,
+     \frac{\pi(\mathbf{m}')}{\pi(\mathbf{m}^{(k)})}\Big)$\\[4pt]
+  {\footnotesize \emph{full, non-Gaussian} posterior;\\
+   many forward solves}};
+
+% --- shared estimate -------------------------------------------------
+\node[postbox, below=10mm of $(enkf.south)!0.5!(mcmc.south)$, text width=92mm]
+  (estimate) {
+  \textbf{Estimate of} $\mathbf{m}$ \textbf{with uncertainty}\\[2pt]
+  posterior mean / analysis state \ $+$ \ spread (covariance / credible intervals)};
+
+\draw[flow] (bayes.south) -- ($(enkf.north)+(0,0)$);
+\draw[flow] (bayes.south) -- ($(mcmc.north)+(0,0)$);
+\draw[flow] (enkf.south) -- (estimate.north -| enkf.south);
+\draw[flow] (mcmc.south) -- (estimate.north -| mcmc.south);
+
+% little posterior sketch on the estimate box
+\node[right=4mm of estimate, anchor=west] (sketch) {
+  \begin{tikzpicture}[baseline]
+    \draw[gray] (-1.6,0) -- (1.6,0);
+    \draw[teal!70!black, line width=1pt, smooth, samples=50, domain=-1.5:1.5]
+      plot (\x, {0.9*exp(-2.6*\x*\x)});           % EnKF Gaussian
+    \draw[purple!70!black, line width=1pt, dashed, smooth, samples=60,
+          domain=-1.5:1.5]
+      plot (\x, {0.85*exp(-3*(\x+0.25)^2)+0.35*exp(-6*(\x-0.7)^2)}); % MCMC
+    \node[font=\scriptsize, teal!60!black] at (0.0,1.15) {EnKF};
+    \node[font=\scriptsize, purple!70!black] at (1.0,0.7) {MCMC};
+  \end{tikzpicture}};
+
+\end{tikzpicture}
+\end{document}

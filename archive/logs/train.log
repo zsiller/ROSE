@@ -1,0 +1,6 @@
+13:53:18 | INFO    | train | Creating new surrogate; 2 HDF5 file(s) to ingest
+13:53:46 | INFO    | train | Initial train (density): 122 rows from 2 file(s)
+13:53:46 | INFO    | train | Loaded surrogate (2 files tracked); 2 new HDF5 file(s) to ingest
+13:55:16 | INFO    | train | Incremental train (density): +122 rows from 2 file(s), 244 total rows, warm_start=True
+13:55:16 | INFO    | train | Loaded surrogate (4 files tracked); 0 new HDF5 file(s) to ingest
+13:55:16 | INFO    | train | No new simulation data; skipping training

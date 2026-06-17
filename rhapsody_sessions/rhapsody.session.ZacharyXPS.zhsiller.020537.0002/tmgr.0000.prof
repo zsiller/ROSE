@@ -1,0 +1,4 @@
+#time,event,comp,thread,uid,state,msg
+1774472210.7754040,sync_abs,tmgr.0000,Thread-11 (_work_loop),,,ZacharyXPS.localdomain:172.30.123.79:1774472210.7312112:1774472210.6449852:ntp
+1774472210.7759271,component_init,tmgr.0000,Thread-11 (_work_loop),,,
+1774472216.5114460,setup_done,tmgr.0000,MainThread,tmgr.0000,,

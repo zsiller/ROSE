@@ -1,0 +1,4 @@
+1774480676.333 : tmgr_scheduling.0000 : 13262 : 138709666271488 : DEBUG    : pwatcher create
+1774480676.334 : tmgr_scheduling.0000 : 13262 : 138709628380864 : DEBUG    : pwatcher started
+1774480676.335 : tmgr_scheduling.0000 : 13262 : 138709666271488 : DEBUG    : add pid 13018 to watchlist
+1774480676.335 : tmgr_scheduling.0000 : 13262 : 138709666271488 : DEBUG    : add pid 13262 to watchlist

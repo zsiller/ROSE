@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rose_env/bin/python workflows/run_context.py)",
+      "Read(//usr/include/eigen3/Eigen/**)",
+      "Read(//usr/include/hdf5/serial/**)",
+      "Read(//usr/include/**)",
+      "Read(//usr/bin/**)",
+      "Bash(dpkg -l)",
+      "Bash(awk '{print $2}')",
+      "Read(//usr/lib/x86_64-linux-gnu/**)",
+      "Bash(sed -n 35,50p analysis/surrogate_uncertainty.py)",
+      "Bash(sed -n 10,45p figures/plot_shock_tube_rho.py)",
+      "Bash(sed -n 12,50p figures/plot_shock_tube_error_maps.py)"
+    ]
+  }
+}

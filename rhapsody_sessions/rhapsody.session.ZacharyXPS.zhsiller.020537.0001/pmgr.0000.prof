@@ -1,0 +1,9 @@
+#time,event,comp,thread,uid,state,msg
+1774470226.6235394,sync_abs,pmgr.0000,Thread-16 (_work_loop),,,ZacharyXPS.localdomain:172.30.123.79:1774470226.5865293:1774470226.523446:ntp
+1774470226.6237838,component_init,pmgr.0000,Thread-16 (_work_loop),,,
+1774470228.0995994,setup_done,pmgr.0000,MainThread,pmgr.0000,,
+1774470228.1310732,advance,pmgr.0000,MainThread,pilot.0000,NEW,
+1774470228.1313705,advance,pmgr.0000,MainThread,pilot.0000,PMGR_LAUNCHING_PENDING,
+1774470228.1399276,advance,pmgr.0000,Thread-20 (_listener),pilot.0000,PMGR_LAUNCHING,
+1774470228.1629698,advance,pmgr.0000,Thread-20 (_listener),pilot.0000,PMGR_ACTIVE_PENDING,
+1774470238.6553197,advance,pmgr.0000,Thread-20 (_listener),pilot.0000,FAILED,

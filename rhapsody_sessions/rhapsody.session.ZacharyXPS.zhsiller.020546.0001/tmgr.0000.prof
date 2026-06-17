@@ -1,0 +1,8 @@
+#time,event,comp,thread,uid,state,msg
+1775188959.0571339,sync_abs,tmgr.0000,Thread-11 (_work_loop),,,ZacharyXPS.localdomain:172.30.123.79:1775188959.0188344:1775188958.9915583:ntp
+1775188959.0585070,component_init,tmgr.0000,Thread-11 (_work_loop),,,
+1775188965.4113505,setup_done,tmgr.0000,MainThread,tmgr.0000,,
+1775188967.5025353,advance,tmgr.0000,MainThread,task.000001,NEW,
+1775188967.5027137,advance,tmgr.0000,MainThread,task.000001,TMGR_SCHEDULING_PENDING,
+1775188979.4987667,advance,tmgr.0000,Thread-20 (_listener),task.000001,FAILED,
+1775188979.5050199,advance,tmgr.0000,Thread-20 (_listener),task.000001,FAILED,

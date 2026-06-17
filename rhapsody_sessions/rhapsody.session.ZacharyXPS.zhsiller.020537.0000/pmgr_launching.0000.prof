@@ -1,0 +1,21 @@
+#time,event,comp,thread,uid,state,msg
+1774470123.0354693,sync_abs,pmgr_launching.0000,MainThread,,,ZacharyXPS.localdomain:172.30.123.79:1774470123.0352392:1774470122.9998662:ntp
+1774470123.0363398,comp_start,pmgr_launching.0000,MainThread,pmgr_launching.0000,,
+#time,event,comp,thread,uid,state,msg
+1774470123.2737634,sync_abs,pmgr_launching.0000,Thread-2 (_work_loop),,,ZacharyXPS.localdomain:172.30.123.79:1774470123.0705802:1774470123.0352073:ntp
+1774470123.2739866,component_init,pmgr_launching.0000,Thread-2 (_work_loop),,,
+1774470123.5045388,advance,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,PMGR_LAUNCHING,
+1774470123.5142946,staging_in_start,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,
+1774470123.5148280,staging_in_start,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0000
+1774470123.5517824,staging_in_stop,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0000
+1774470123.5518506,staging_in_start,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0001
+1774470123.5556183,staging_in_stop,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0001
+1774470123.5556757,staging_in_start,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0002
+1774470123.5595653,staging_in_stop,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0002
+1774470123.5823157,staging_in_start,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0003
+1774470123.5856545,staging_in_stop,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,sd.0003
+1774470123.5859115,staging_in_stop,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,
+1774470123.5859115,submission_start,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,
+1774470123.5936611,submission_stop,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,,
+1774470123.5936997,advance,pmgr_launching.0000,Thread-2 (_work_loop),pilot.0000,PMGR_ACTIVE_PENDING,
+1774470134.2080214,advance,pmgr_launching.0000,Local Executor Process Reaper,pilot.0000,FAILED,
