@@ -25,6 +25,7 @@ import os
 import shutil
 import subprocess
 import sys
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
@@ -132,10 +133,11 @@ method
     chain_samples = {chain_samples} seed = {seed}
     export_chain_points_file '{chain_name}'
     dram
-    burn_in_samples = {int(0.2 * chain_samples)}  # 20% burn-in
+    standardized_space
+    burn_in_samples = {int(0.1 * chain_samples)}  # 20% burn-in
     proposal_covariance
-      file 'prop_cov.dat'
-        matrix
+        prior
+      
 
 variables
   uniform_uncertain 4
@@ -160,6 +162,153 @@ responses
   no_hessians
 """
     input_path.write_text(text)
+
+
+# --------------------------------------------------------------------------- #
+# Flexible input writer used by the batch method-comparison study
+# (run_experiments.py). The legacy write_dakota_input above is left untouched so
+# the existing single-run CLI keeps producing byte-for-byte the same deck.
+# --------------------------------------------------------------------------- #
+
+# Which samplers each Bayesian library accepts (from dakota.input.summary, 6.24).
+QUESO_SAMPLERS = {"dram", "delayed_rejection", "adaptive_metropolis",
+                  "metropolis_hastings", "multilevel"}
+MUQ_SAMPLERS = {"dram", "delayed_rejection", "adaptive_metropolis",
+                "metropolis_hastings", "mala", "dili", "multilevel_mcmc"}
+
+
+@dataclass
+class MethodSpec:
+    """One Dakota ``bayes_calibration`` configuration.
+
+    ``standardized_space`` is a QUESO-only keyword (MUQ has no such option, so it
+    is silently dropped for ``library='muq'`` -- which is exactly why MUQ runs
+    must carry a ``proposal_covariance`` to supply the per-parameter metric that
+    standardization would otherwise provide).
+    """
+    library: str = "queso"                     # 'queso' | 'muq'
+    sampler: str = "dram"                       # see QUESO_SAMPLERS / MUQ_SAMPLERS
+    standardized_space: bool = True             # QUESO only
+    proposal: str = "prior"                     # 'prior' | 'file' | 'derivatives'
+    proposal_file: str | None = None           # abs path for proposal='file' (matrix)
+    proposal_multiplier: float | None = None   # widen/narrow the prior proposal
+    proposal_update_period: int | None = None  # for proposal='derivatives'
+    gradients: str = "none"                     # 'none' | 'numerical'
+    fd_interval: str = "central"               # 'forward' | 'central'
+    fd_step: float = 1.0e-3                     # relative finite-difference step
+    burn_in_frac: float = 0.2
+    sampler_opts: dict = field(default_factory=dict)  # MUQ extras (step_size, ...)
+
+
+def _render_sampler(spec: MethodSpec) -> str:
+    lines = [f"    {spec.sampler}"]
+    for key, val in (spec.sampler_opts or {}).items():
+        lines.append(f"      {key} {val}")
+    return "\n".join(lines)
+
+
+def _render_proposal(spec: MethodSpec) -> str:
+    if spec.proposal == "prior":
+        s = "    proposal_covariance\n      prior"
+        if spec.proposal_multiplier is not None:
+            s += f"\n        multiplier {spec.proposal_multiplier:g}"
+        return s
+    if spec.proposal == "file":
+        if not spec.proposal_file:
+            raise ValueError("proposal='file' requires proposal_file")
+        return (f"    proposal_covariance\n      file '{spec.proposal_file}'\n"
+                f"        matrix")
+    if spec.proposal == "derivatives":
+        s = "    proposal_covariance\n      derivatives"
+        if spec.proposal_update_period is not None:
+            s += f"\n        update_period {spec.proposal_update_period}"
+        return s
+    raise ValueError(f"unknown proposal kind: {spec.proposal!r}")
+
+
+def _render_responses(spec: MethodSpec, n_calibration: int, obs_file: str) -> str:
+    head = (f"responses\n  calibration_terms = {n_calibration}\n"
+            f"    calibration_data_file = '{obs_file}'\n      freeform\n"
+            f"      num_experiments = 1\n      variance_type = 'scalar'\n")
+    if spec.gradients == "numerical":
+        grad = (f"  numerical_gradients\n    method_source dakota\n"
+                f"    interval_type {spec.fd_interval}\n"
+                f"    fd_step_size {spec.fd_step:g}\n")
+    elif spec.gradients == "none":
+        grad = "  no_gradients\n"
+    else:
+        raise ValueError(f"unknown gradients mode: {spec.gradients!r}")
+    return head + grad + "  no_hessians\n"
+
+
+def _render_variables(initial: np.ndarray, lower: np.ndarray,
+                      upper: np.ndarray) -> str:
+    def row(vals):
+        return "  ".join(f"{v:.6g}" for v in vals)
+    return ("variables\n  uniform_uncertain 4\n"
+            "    descriptors   'p_high'  'p_low'  'rho_high'  'rho_low'\n"
+            f"    lower_bounds   {row(lower)}\n"
+            f"    upper_bounds   {row(upper)}\n"
+            f"    initial_point  {row(initial)}\n")
+
+
+def write_dakota_input_ex(*,
+                          spec: MethodSpec,
+                          initial_point: np.ndarray,
+                          n_calibration: int,
+                          chain_samples: int,
+                          seed: int,
+                          input_path: Path,
+                          chain_file: str = "chain.dat",
+                          tabular_file: str = "tabular.dat",
+                          obs_file: str = "sod_obs.dat",
+                          driver: str = "sod_driver.sh",
+                          lower: np.ndarray = LOWER_BOUNDS,
+                          upper: np.ndarray = UPPER_BOUNDS) -> str:
+    """Render an arbitrary QUESO/MUQ Bayesian-calibration deck.
+
+    All paths (``chain_file``, ``tabular_file``, ``obs_file``, ``driver``) are
+    written verbatim into the deck, so the caller can point them at absolute
+    locations and run each chain in its own working directory (the parallel
+    batch study does exactly this). Returns the rendered text.
+    """
+    if spec.library == "queso" and spec.sampler not in QUESO_SAMPLERS:
+        raise ValueError(f"queso has no sampler {spec.sampler!r}; "
+                         f"choose from {sorted(QUESO_SAMPLERS)}")
+    if spec.library == "muq" and spec.sampler not in MUQ_SAMPLERS:
+        raise ValueError(f"muq has no sampler {spec.sampler!r}; "
+                         f"choose from {sorted(MUQ_SAMPLERS)}")
+    if spec.library not in ("queso", "muq"):
+        raise ValueError(f"unknown library {spec.library!r}")
+
+    initial = np.asarray(initial_point, dtype=float)
+    if initial.size != 4:
+        raise ValueError(f"expected 4 Sod params, got {initial.size}")
+
+    std = ("    standardized_space\n"
+           if spec.standardized_space and spec.library == "queso" else "")
+    burn = int(spec.burn_in_frac * chain_samples)
+
+    method = (
+        f"method\n  bayes_calibration {spec.library}\n"
+        f"    chain_samples = {chain_samples} seed = {seed}\n"
+        f"    export_chain_points_file '{chain_file}'\n"
+        f"{_render_sampler(spec)}\n"
+        f"{std}"
+        f"{_render_proposal(spec)}\n"
+        f"    burn_in_samples = {burn}\n"
+    )
+    text = (
+        "# Generated by run_mcmc.write_dakota_input_ex -- do not edit by hand.\n\n"
+        f"environment\n  tabular_data\n    tabular_data_file '{tabular_file}'\n\n"
+        f"{method}\n"
+        f"{_render_variables(initial, np.asarray(lower, float), np.asarray(upper, float))}\n"
+        f"interface\n  fork\n    analysis_drivers = '{driver}'\n"
+        f"    parameters_file = 'params.in'\n    results_file    = 'results.out'\n\n"
+        f"{_render_responses(spec, n_calibration, obs_file)}"
+    )
+    Path(input_path).write_text(text)
+    return text
 
 
 def resolve_dakota(path: Path | None) -> Path:
@@ -360,7 +509,7 @@ def main() -> None:
     ap.add_argument("--plot-dir", dest="plot_dir", type=Path, default=HERE,
                     help="directory for dakota_marginals.png and dakota_field.png")
     ap.add_argument("--plot-field-draws", dest="plot_field_draws", type=int,
-                    default=200, help="posterior draws used for the field band")
+                    default=0, help="posterior draws used for the field band")
     args = ap.parse_args()
 
     prepare_and_run(obs_path=args.obs,

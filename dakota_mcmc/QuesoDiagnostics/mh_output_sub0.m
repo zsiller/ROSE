@@ -22,3 +22,9 @@ rejected = 0.341468;
 
 rejected = 0.911582;
 
+rejected = 0.333267;
+
+rejected = 0.458458;
+
+rejected = 0.29633;
+

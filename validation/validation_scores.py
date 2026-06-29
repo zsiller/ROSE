@@ -72,8 +72,7 @@ if __name__ == "__main__":
     crps = crps_scores(pred, obs, cell_idx, method=CRPS_METHOD)
 
     print(f"[obs]    {val.OBS}: m = {obs.size} cells {cell_idx.tolist()}")
-    print(f"[chain]  {val.CHAIN}: {chain.shape[0]} draws "
-          f"(burn {val.BURN:.0%}, cap {val.MAX_SAMPLES})")
+    print(f"[chain]  {val.CHAIN}: {chain.shape[0]} draws ")
     print(f"[surrogate] {val.SURROGATE}")
     print(f"[result] surrogate-pred mean RMSE vs observed = "
           f"{np.sqrt(np.mean((pmean - obs) ** 2)):.4e}")
